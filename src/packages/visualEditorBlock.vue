@@ -1,6 +1,6 @@
 <template>
     <div :class="classes" :style="{...blockStyle}" ref="el">
-       <component :is="currentComp.render()"></component>
+       <component :is="currentComp.render({ props: props.block.props || {}})"></component>
     </div>
 </template>
 

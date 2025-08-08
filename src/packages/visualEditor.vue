@@ -41,7 +41,7 @@
                     ref="containerRef"
                     :style="{...containerStyle}">
                     <VisualEditorBlock
-                        @mousedown="blockFocusHandler.block.onMouseDown($event, value)"
+                        @mousedown="blockFocusHandler.block.onMouseDown($event, value, index)"
                         @contextmenu="handler.onContextMenuBlock($event, value)"
                         :config="props.config"
                         v-for="value, index in dataModel.value.blocks"
@@ -83,9 +83,9 @@ const containerStyle = computed(() => ({
 }))
 
 const containerRef = ref<HTMLDivElement>()
-
+const selectIndex = ref(-1)
 const state = reactive({
-    selectBolck: null as null | VisualEditorBlockData // 当前选中的组件
+    selectBolck: computed(() => (dataModel.value.blocks || [])[selectIndex.value])
 })
 
 // 计算选中与未选中的block数据
@@ -165,12 +165,12 @@ const blockFocusHandler = (() => {
                 if (!e.shiftKey) {
                     // 点击容器空白处清空所有选中
                     clearFocusedBlock()
-                    state.selectBolck = null
+                    selectIndex.value = -1
                 }
             }
         },
         block: {
-            onMouseDown(e: MouseEvent, block: VisualEditorBlockData) {
+            onMouseDown(e: MouseEvent, block: VisualEditorBlockData, index: number) {
                 e.stopPropagation()
                 e.preventDefault()
                 // 按shift多选 选择完之后 松开shift 在拖拽
@@ -187,7 +187,7 @@ const blockFocusHandler = (() => {
                         clearFocusedBlock(block)
                     }
                 }
-                state.selectBolck = block
+                selectIndex.value = index
                 blockDragger.mouseDown(e)
             }
         }
@@ -223,8 +223,14 @@ const blockDragger = (() => {
                 const { focus, unFocus } = focusData.value
                 const { left, top, width, height } = state.selectBolck!
                 let lines = { x: [], y: [] } as VisualEditorMarkLine
-                unFocus.forEach(item => {
-                    const { left:l, top:t, width:w, height:h } = item
+                // 最后一项增加的是容器的中心辅助线
+                [...unFocus, {
+                    top: 0,
+                    left: 0,
+                    width: dataModel.value.container.width,
+                    height: dataModel.value.container.height
+                }].forEach(item => {
+                    const { left: l, top: t, width: w, height: h } = item
                     lines.y.push({ top: t, showTop: t})  // 顶部对其顶部
                     lines.y.push({ top: t + h, showTop: t + h }) // 顶部对其底部
                     lines.y.push({ top: t + h / 2 - height / 2, showTop: t + h / 2 }) // 顶部对其中间
