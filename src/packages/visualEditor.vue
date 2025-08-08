@@ -1,5 +1,5 @@
 <template>
-    <div class="visual-editor">
+    <div :class="classes">
         <div class="visual-editor-menu">
             <div class="visual-editor-menu-item"
                 draggable="true"
@@ -21,8 +21,8 @@
                 </el-tooltip>
                 <div v-else class="visual-editor-head-button"
                     @click="btn.handler">
-                    <i :class="`iconfont ${btn.icon}`"></i>
-                    <span>{{ btn.label }}</span>
+                    <i :class="`iconfont ${typeof btn.icon === 'function' ? btn.icon() : btn.icon}`"></i>
+                    <span>{{ typeof btn.label === 'function' ? btn.label() : btn.label }}</span>
                 </div>
             </template>
             
@@ -85,8 +85,16 @@ const containerStyle = computed(() => ({
 const containerRef = ref<HTMLDivElement>()
 const selectIndex = ref(-1)
 const state = reactive({
-    selectBolck: computed(() => (dataModel.value.blocks || [])[selectIndex.value])
+    selectBolck: computed(() => (dataModel.value.blocks || [])[selectIndex.value]),
+    editing: false
 })
+
+const classes = computed(() => ([
+    'visual-editor',
+    {
+        'visual-editor-editing': state.editing
+    }
+]))
 
 // 计算选中与未选中的block数据
 const focusData = computed(() => {
@@ -160,6 +168,7 @@ const blockFocusHandler = (() => {
     return {
         container: {
             onMouseDown(e: MouseEvent) {
+                if(!state.editing) return
                 e.preventDefault()
                 if (e.target !== e.currentTarget) return
                 if (!e.shiftKey) {
@@ -171,6 +180,7 @@ const blockFocusHandler = (() => {
         },
         block: {
             onMouseDown(e: MouseEvent, block: VisualEditorBlockData, index: number) {
+                if(!state.editing) return
                 e.stopPropagation()
                 e.preventDefault()
                 // 按shift多选 选择完之后 松开shift 在拖拽
@@ -358,6 +368,7 @@ const useCommander = useVisualCommand({
 
 const handler = {
     onContextMenuBlock: (e: MouseEvent, block: VisualEditorBlockData) => {
+        if(!state.editing) return
         e.stopPropagation()
         e.preventDefault()
         $$dropdown(dropdownOptionContent(e, block, useCommander, showBlockData, importBlockData))
@@ -370,6 +381,17 @@ const buttons = [
     },
     {
         label: '重做', icon: 'icon-forward', handler: () => useCommander.redo(), tip: 'Ctrl + Y, Ctrl + Shift + Z'
+    },
+    {
+        label: () => state.editing ? '编辑' : '预览',
+        icon: () => state.editing ? 'icon-edit' : 'icon-browse',
+        handler: () => {
+            console.log(`output->`,'编辑预览', state.editing)
+            if (!state.editing) {
+                clearFocusedBlock()
+            }
+            state.editing = !state.editing
+        },
     },
     {
         label: '导入', icon: 'icon-import', handler: async () => {
@@ -538,15 +560,11 @@ $pramary: #409eff; // 主要颜色
             overflow-y: auto;
             .visual-editor-container {
                 background-color: white;
-                flex-shrink: 0;
-                flex-grow: 0;
                 position: relative;
                 .visual-editor-block {
                     position: absolute;
-                    &:after {
-                        content: '';
-                        position: absolute;
-                        inset: -3px;
+                    :deep(.el-select) {
+                        width: 194px;
                     }
                 }
                 .visual-editor-block-focus {
@@ -565,6 +583,21 @@ $pramary: #409eff; // 主要颜色
                     top:0;
                     bottom:0;
                     border-left: 1px dashed $pramary;
+                }
+            }
+        }
+    }
+    &.visual-editor-editing {
+        & > .visual-editor-body {
+            .visual-editor-container {
+                border: 1px dashed $pramary;
+                box-sizing: border-box;
+                .visual-editor-block {
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        inset: -3px;
+                    }
                 }
             }
         }

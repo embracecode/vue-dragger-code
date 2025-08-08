@@ -63,5 +63,5 @@ visualConfig.register('select', {
 visualConfig.register('input', {
     label: '输入框',
     preview: () => <ElInput/>,
-    render: () => <ElInput/>
+    render: () => <ElInput />
 })
