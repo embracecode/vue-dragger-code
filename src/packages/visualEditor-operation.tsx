@@ -60,6 +60,9 @@ export const VisualEditorOperation = defineComponent({
                         })
                     }
                 </ElSelect>
+            },
+            [VisualEditorPropsType.table]: (propName: string, props: VisualEditorProps) => {
+                return <div>编辑 table props</div>
             }
         }
 
