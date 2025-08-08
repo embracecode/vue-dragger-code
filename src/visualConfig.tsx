@@ -49,10 +49,14 @@ visualConfig.register('select', {
         }
     </ElSelect>,
     props: {
-        options: createTableProps('下拉框', [
-            { label: '显示值', field: 'label' },
-            { label: '绑定字段', field: 'value' }
-        ])
+        options: createTableProps('下拉框', {
+            options: [
+                { label: '显示文本', field: 'label' },
+                { label: '绑定字段', field: 'field' },
+                { label: '备注', field: 'comments'},
+            ],
+            showKey: 'label'
+        })
     }
 })
 

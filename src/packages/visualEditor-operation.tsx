@@ -4,6 +4,7 @@ import type { JSX } from "vue/jsx-runtime";
 import { ElButton, ElColorPicker, ElForm, ElFormItem, ElInput, ElInputNumber, ElOption, ElSelect } from "element-plus";
 import { VisualEditorPropsType, type VisualEditorProps } from "./visualEditor.props";
 import deepcopy from "deepcopy";
+import { TablePropsEditor } from "./component/table-props-editor/table-props-editor";
 
 export const VisualEditorOperation = defineComponent({
     props: {
@@ -14,11 +15,10 @@ export const VisualEditorOperation = defineComponent({
         updateModelValue: { type: Function as PropType<((value: VisualEditorModelValue) => void)>, required: true }
     },
     setup(props) {
-        console.log(props, 'VisualEditorOperation')
-
         const state = reactive({
             editData: {} as any
         })
+
         const methods = {
             apply: () => {
                 if (!props.block) {
@@ -28,7 +28,7 @@ export const VisualEditorOperation = defineComponent({
                     // 当前编辑block组件的属性
                     props.updateBlock({
                         ...props.block,
-                        props: deepcopy(state.editData)
+                        props: state.editData
                     }, props.block)
                 }
             },
@@ -43,7 +43,6 @@ export const VisualEditorOperation = defineComponent({
         watch(() => props.block, (val) => {
             if (!val) {
                 state.editData = deepcopy(props.dataModel.value.container)
-                console.log(state.editData, '---------')
             } else {
                 state.editData = deepcopy(val.props || {})
             }
@@ -62,7 +61,7 @@ export const VisualEditorOperation = defineComponent({
                 </ElSelect>
             },
             [VisualEditorPropsType.table]: (propName: string, props: VisualEditorProps) => {
-                return <div>编辑 table props</div>
+                return <TablePropsEditor v-model={state.editData[propName]} propsConfig={props}></TablePropsEditor>
             }
         }
 
@@ -83,6 +82,7 @@ export const VisualEditorOperation = defineComponent({
 
                 const { componentKey } = props.block
                 const component = props.config.componentMap[componentKey]
+                console.log(component.props, 'component.props')
                 if (!!component && !!component.props) {
                     content = <>
                         {

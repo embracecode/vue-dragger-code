@@ -46,9 +46,12 @@ export function createSelectProps(label: string, options: VisualEditorSelectOpti
 /**-----------------------------table------------------------------------------ */
 
 export type VisualEditorTableColumn = {
-    label: string, // 列显示的文本
-    field: string, // 列绑定的字段
-}[]
+    options: {
+        label: string, // 列显示的文本
+        field: string, // 列绑定的字段
+    }[],
+    showKey: string, // 列绑定的字段
+}
 
 export function createTableProps(label: string, columns: VisualEditorTableColumn): VisualEditorProps {
     return {

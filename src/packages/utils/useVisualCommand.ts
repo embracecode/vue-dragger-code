@@ -156,6 +156,7 @@ export function useVisualCommand(
                 after: (() => {
                     blocks = [...blocks]
                     const index = dataModel.value.blocks.indexOf(oldBlock)
+                    console.log(`output->`,index, block, oldBlock, '应用时更新update的数据')
                     if (index > -1) {
                         blocks.splice(index, 1, block)
                     }
