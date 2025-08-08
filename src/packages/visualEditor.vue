@@ -529,6 +529,7 @@ $pramary: #409eff; // 主要颜色
             // overflow: auto;
             display: flex;
             justify-content: center;
+            overflow-y: auto;
             .visual-editor-container {
                 background-color: white;
                 flex-shrink: 0;
