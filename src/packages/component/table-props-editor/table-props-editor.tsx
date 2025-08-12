@@ -29,9 +29,9 @@ export const TablePropsEditor = defineComponent({
         }
 
         return () => (
-            <div>
+            <div onClick={onClick}>
                 {
-                    (!model.value || model.value.length === 0) && <ElButton onClick={onClick}>
+                    (!model.value || model.value.length === 0) && <ElButton>
                         添加
                     </ElButton>
                 }

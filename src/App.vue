@@ -58,9 +58,7 @@ const stateIndex = ref(0)
 //     }]
 // })
 const jsonData = reactive(JsonDataZindex)
-const formData = reactive({
-    userName: 'admin'
-})
+const formData = reactive({})
 const visualConfigData = reactive(visualConfig)
 </script>
 

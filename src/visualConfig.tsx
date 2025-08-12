@@ -43,7 +43,7 @@ visualConfig.register('button', {
 visualConfig.register('select', {
     label: '下拉框',
     preview: () => <ElSelect></ElSelect>,
-    render: ({ props }) => <ElSelect>
+    render: ({ props, model }) => <ElSelect placeholder="" {...model.default}>
         {
             (props.options || []).map((item: { label: string, field: string }) => <ElOption key={item.field} label={item.label} value={item.field}></ElOption>)
         }
@@ -57,6 +57,9 @@ visualConfig.register('select', {
             ],
             showKey: 'label'
         })
+    },
+    model: {
+        default: '绑定字段'
     }
 })
 

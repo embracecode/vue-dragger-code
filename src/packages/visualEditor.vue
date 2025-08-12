@@ -141,6 +141,7 @@ const menuDragger = (() => {
     // 处理菜单拖拽开始和结束
     const blockHandler = {
         dragstart: (e: DragEvent, component: VisualEditorComponent) => {
+            if (state.preview) return
             containerRef.value!.addEventListener('dragenter', containerHandler.dragenter)
             containerRef.value!.addEventListener('dragover', containerHandler.dragover)
             containerRef.value!.addEventListener('dragleave', containerHandler.dragleave)
