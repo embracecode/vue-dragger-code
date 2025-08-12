@@ -63,5 +63,11 @@ visualConfig.register('select', {
 visualConfig.register('input', {
     label: '输入框',
     preview: () => <ElInput/>,
-    render: () => <ElInput />
+    render: ( { model } ) => {
+        console.log(model, 'input')
+        return <ElInput {...model.default}></ElInput>
+    },
+    model: {
+        default: '绑定字段'
+    }
 })

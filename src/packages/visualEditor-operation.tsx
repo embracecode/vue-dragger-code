@@ -26,33 +26,27 @@ export const VisualEditorOperation = defineComponent({
                     props.updateModelValue({ ...props.dataModel.value, container: deepcopy(state.editData) })
                 } else {
                     // 当前编辑block组件的属性
-                    props.updateBlock({
-                        ...props.block,
-                        props: state.editData
-                    }, props.block)
+                    const newBlock = state.editData
+                    props.updateBlock(newBlock, props.block)
                 }
             },
             reset: () => {
                 if (!props.block) {
                     state.editData = deepcopy(props.dataModel.value.container)
                 } else {
-                    state.editData = deepcopy(props.block.props)
+                    state.editData = deepcopy(props.block)
                 }
             }
         }
         watch(() => props.block, (val) => {
-            if (!val) {
-                state.editData = deepcopy(props.dataModel.value.container)
-            } else {
-                state.editData = deepcopy(val.props || {})
-            }
+            methods.reset()
         }, { immediate: true })
 
         const propElementMap = {
-            [VisualEditorPropsType.input]: (propName: string, props: VisualEditorProps) => <ElInput v-model={state.editData[propName]}></ElInput>,
-            [VisualEditorPropsType.color]: (propName: string, props: VisualEditorProps) => <ElColorPicker v-model={state.editData[propName]} />,
+            [VisualEditorPropsType.input]: (propName: string, props: VisualEditorProps) => <ElInput v-model={state.editData.props[propName]}></ElInput>,
+            [VisualEditorPropsType.color]: (propName: string, props: VisualEditorProps) => <ElColorPicker v-model={state.editData.props[propName]} />,
             [VisualEditorPropsType.select]: (propName: string, props: VisualEditorProps) => {
-                return <ElSelect placeholder="" v-model={state.editData[propName]}>
+                return <ElSelect placeholder="" v-model={state.editData.props[propName]}>
                     {
                         props.options?.map(option => {
                             return <ElOption label={option.label} value={option.value}></ElOption>
@@ -61,38 +55,53 @@ export const VisualEditorOperation = defineComponent({
                 </ElSelect>
             },
             [VisualEditorPropsType.table]: (propName: string, props: VisualEditorProps) => {
-                return <TablePropsEditor v-model={state.editData[propName]} propsConfig={props}></TablePropsEditor>
+                return <TablePropsEditor v-model={state.editData.props[propName]} propsConfig={props}></TablePropsEditor>
             }
         }
 
 
         return () => {
-            let content: JSX.Element | null = null
+            let content: JSX.Element[] = []
 
             if (!props.block) {
-                content = <>
+                content.push(<>
                     <ElFormItem label="容器宽度">
                         <ElInputNumber v-model={state.editData.width} step={100}></ElInputNumber>
                     </ElFormItem>
                     <ElFormItem label="容器高度">
                         <ElInputNumber v-model={state.editData.height} step={100}></ElInputNumber>
                     </ElFormItem>
-                </>
+                </>)
             } else {
 
                 const { componentKey } = props.block
                 const component = props.config.componentMap[componentKey]
-                console.log(component.props, 'component.props')
-                if (!!component && !!component.props) {
-                    content = <>
-                        {
-                            Object.entries(component.props).map(([propName, propValue]) => {
-                                return <ElFormItem label={propValue.label} key={propName}>
-                                    {propElementMap[propValue.type](propName, propValue)}
-                                </ElFormItem>
-                            })
-                        }
-                    </>
+                console.log(component.props, 'component.props', component.model, 'component.model')
+
+                if (!!component) {
+                    if (!!component.props) {
+                        content.push(<>
+                            {
+                                Object.entries(component.props).map(([propName, propValue]) => {
+                                    return <ElFormItem label={propValue.label} key={propName}>
+                                        {propElementMap[propValue.type](propName, propValue)}
+                                    </ElFormItem>
+                                })
+                            }
+                        </>)
+                    }
+                    if (!!component.model) {
+                        console.log(component.model, 'component.model', state.editData.model)
+                        content.push(<>
+                            {
+                                Object.entries(component.model).map(([modelName, label]) => {
+                                    return <ElFormItem label={label} key={label}>
+                                        <ElInput v-model={state.editData.model[modelName]}/>
+                                    </ElFormItem>
+                                })
+                            }
+                        </>)
+                    }
                 }
             }
 

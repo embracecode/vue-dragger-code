@@ -27,7 +27,9 @@
             </template>
             
         </div>
+        <!-- 不加key  在切换选中的时候 会无法更新属性绑定的界面 很奇怪的问题  在app.vue 中模拟了一下这个场景发现 children组件会重新渲染 在这里不行-->
         <VisualEditorOperation
+            :key="state.selectBolck?.top ? state.selectBolck?.top : '0'"
             :block="state.selectBolck"
             :config="props.config"
             :dataModel="dataModel" 
@@ -44,6 +46,7 @@
                         @mousedown="blockFocusHandler.block.onMouseDown($event, value, index)"
                         @contextmenu="handler.onContextMenuBlock($event, value)"
                         :config="props.config"
+                        :formData="props.formData"
                         v-for="value, index in dataModel.value.blocks"
                         :key="value.componentKey"
                         :block="value"></VisualEditorBlock>
@@ -56,8 +59,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, reactive } from 'vue'
-import { VisualEditorModelValue, VisualEditorConfig, createNewBlock, VisualEditorMarkLine } from './visualEditor.utils'
+import { computed, ref, reactive, type PropType } from 'vue'
+import { createNewBlock, type VisualEditorModelValue, type VisualEditorConfig, type VisualEditorMarkLine, type VisualEditorBlockData, type VisualEditorComponent } from './visualEditor.utils'
 import { useModel } from './utils/useModel'
 import { useVisualCommand } from './utils/useVisualCommand'
 import { createEvent } from './plugins/event'
@@ -68,7 +71,8 @@ import { $$dropdown, dropdownOptionContent } from './utils/dropdown-service'
 import { ElMessageBox } from 'element-plus'
 const props = defineProps<{
     modelValue: VisualEditorModelValue,
-    config: VisualEditorConfig
+    config: VisualEditorConfig,
+    formData: Record<string, any>
 }>()
 const emit = defineEmits<{
     (e: 'update:modelValue', value: VisualEditorModelValue): Boolean
@@ -86,7 +90,7 @@ const containerRef = ref<HTMLDivElement>()
 const selectIndex = ref(-1)
 const state = reactive({
     selectBolck: computed(() => (dataModel.value.blocks || [])[selectIndex.value]),
-    editing: false
+    editing: true
 })
 
 const classes = computed(() => ([
@@ -120,26 +124,26 @@ const menuDragger = (() => {
     // 处理菜单拖拽开始和结束
     const blockHandler = {
         dragstart: (e: DragEvent, component: VisualEditorComponent) => {
-            containerRef.value.addEventListener('dragenter', containerHandler.dragenter)
-            containerRef.value.addEventListener('dragover', containerHandler.dragover)
-            containerRef.value.addEventListener('dragleave', containerHandler.dragleave)
-            containerRef.value.addEventListener('drop', containerHandler.drop)
+            containerRef.value!.addEventListener('dragenter', containerHandler.dragenter)
+            containerRef.value!.addEventListener('dragover', containerHandler.dragover)
+            containerRef.value!.addEventListener('dragleave', containerHandler.dragleave)
+            containerRef.value!.addEventListener('drop', containerHandler.drop)
             currentComponent = component
             dragStart.emit()
         },
         dragend: (e: DragEvent) => {
-            containerRef.value.removeEventListener('dragenter', containerHandler.dragenter)
-            containerRef.value.removeEventListener('dragover', containerHandler.dragover)
-            containerRef.value.removeEventListener('dragleave', containerHandler.dragleave)
-            containerRef.value.addEventListener('drop', containerHandler.drop)
+            containerRef.value!.removeEventListener('dragenter', containerHandler.dragenter)
+            containerRef.value!.removeEventListener('dragover', containerHandler.dragover)
+            containerRef.value!.removeEventListener('dragleave', containerHandler.dragleave)
+            containerRef.value!.addEventListener('drop', containerHandler.drop)
             currentComponent = null
         }
     }
     // 拖拽至容器中时的动作
     const containerHandler = {
-        dragenter: (e: DragEvent) => e.dataTransfer.dropEffect = 'move',
+        dragenter: (e: DragEvent) => e.dataTransfer!.dropEffect = 'move',
         dragover: (e: DragEvent) => e.preventDefault(),
-        dragleave: (e: DragEvent) => e.dataTransfer.dropEffect = 'none',
+        dragleave: (e: DragEvent) => e.dataTransfer!.dropEffect = 'none',
         drop: (e: DragEvent) => {
             const blocks = [...dataModel.value.blocks]
             blocks.push(createNewBlock({
@@ -198,6 +202,7 @@ const blockFocusHandler = (() => {
                     }
                 }
                 selectIndex.value = index
+                // console.log(block, index, e, '-----------', state.selectBolck)
                 blockDragger.mouseDown(e)
             }
         }
@@ -343,13 +348,13 @@ const updateDataModel = (blocks: VisualEditorBlockData[]) => {
 
 // 
 const showBlockData = (block: VisualEditorBlockData) => {
-    $$dialog.textarea(JSON.stringify(block), '节点数据', { editReadonly: true })
+    $$dialog.textarea(JSON.stringify(block), '节点数据', { editReadOnly: true })
 }
 
 const importBlockData = async (block: VisualEditorBlockData) => {
     const text = await $$dialog.textarea('', '请输入节点Json字符串')
     try {
-        const data = JSON.parse(text)
+        const data = JSON.parse(text as string)
         useCommander.updateBlock(data, block)
     } catch (error) {
         ElMessageBox.alert('JSON格式错误')
@@ -383,10 +388,9 @@ const buttons = [
         label: '重做', icon: 'icon-forward', handler: () => useCommander.redo(), tip: 'Ctrl + Y, Ctrl + Shift + Z'
     },
     {
-        label: () => state.editing ? '编辑' : '预览',
-        icon: () => state.editing ? 'icon-edit' : 'icon-browse',
+        label: () => !state.editing ? '编辑' : '预览',
+        icon: () => !state.editing ? 'icon-edit' : 'icon-browse',
         handler: () => {
-            console.log(`output->`,'编辑预览', state.editing)
             if (!state.editing) {
                 clearFocusedBlock()
             }
@@ -398,7 +402,7 @@ const buttons = [
             const text = await $$dialog.textarea('', '请输入导入的JSON字符串')
             console.log(text)
             try {
-                const blocks = JSON.parse(text)
+                const blocks = JSON.parse(text as string)
                 updateDataModel(blocks)
             } catch (error) {
                 ElMessageBox.alert('JSON格式错误')
@@ -406,7 +410,7 @@ const buttons = [
         }
     },
     {
-        label: '导出', icon: 'icon-export', handler: () => $$dialog.textarea(JSON.stringify(dataModel.value), '导出的JSON数据', { editReadonly: true })
+        label: '导出', icon: 'icon-export', handler: () => $$dialog.textarea(JSON.stringify(dataModel.value), '导出的JSON数据', { editReadOnly: true })
     },
     {
         label: '置顶', icon: 'icon-place-top', handler: () => useCommander.placeTop(), tip: 'ctrl+up'

@@ -1,1 +1,65 @@
-{"container":{"width":800,"height":500},"blocks":[{"top":193.5,"left":348,"componentKey":"text","adjustPosition":false,"focus":false,"zIndex":0,"width":64,"height":23,"hasResize":false,"props":{}},{"top":248,"left":194,"componentKey":"button","adjustPosition":false,"focus":false,"zIndex":0,"width":60,"height":32,"hasResize":false,"props":{}},{"top":127.5,"left":531,"componentKey":"input","adjustPosition":false,"focus":false,"zIndex":0,"width":110,"height":32,"hasResize":false,"props":{}},{"top":135,"left":107,"componentKey":"select","adjustPosition":false,"focus":false,"zIndex":0,"width":194,"height":32,"hasResize":false,"props":{}}]}
+{
+    "container": {
+        "width": 800,
+        "height": 500
+    },
+    "blocks": [{
+        "top": 88.5,
+        "left": 212,
+        "componentKey": "text",
+        "adjustPosition": false,
+        "focus": false,
+        "zIndex": 0,
+        "width": 64,
+        "height": 21,
+        "hasResize": false,
+        "props": {},
+        "model": {}
+    }, {
+        "top": 141,
+        "left": 424.5,
+        "componentKey": "button",
+        "adjustPosition": false,
+        "focus": false,
+        "zIndex": 0,
+        "width": 59,
+        "height": 32,
+        "hasResize": false,
+        "props": {},
+        "model": {}
+    }, {
+        "top": 215,
+        "left": 42,
+        "componentKey": "select",
+        "adjustPosition": false,
+        "focus": false,
+        "zIndex": 0,
+        "width": 194,
+        "height": 32,
+        "hasResize": false,
+        "props": {},
+        "model": {}
+    }, {
+        "top": 237,
+        "left": 501,
+        "componentKey": "select",
+        "adjustPosition": false,
+        "focus": true,
+        "zIndex": 0,
+        "width": 194,
+        "height": 32,
+        "hasResize": false,
+        "props": {
+            "options": [{
+                "label": "123",
+                "field": "123",
+                "comments": "123"
+            }, {
+                "label": "456",
+                "field": "456",
+                "comments": "456"
+            }]
+        },
+        "model": {}
+    }]
+}

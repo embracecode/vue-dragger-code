@@ -1,15 +1,16 @@
 <template>
     <div :class="classes" :style="{...blockStyle}" ref="el">
-       <component :is="currentComp.render({ props: props.block.props || {}})"></component>
+       <component :is="currentComp.render({ props: props.block.props || {}, model: modelProps || {}})"></component>
     </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
-import { VisualEditorBlockData, VisualEditorConfig } from './visualEditor.utils'
+import type { VisualEditorBlockData, VisualEditorConfig } from './visualEditor.utils'
 const props = defineProps<{
     block: VisualEditorBlockData,
-    config: VisualEditorConfig
+    config: VisualEditorConfig,
+    formData: Record<string, any>
 }>()
 const blockStyle = computed(() => {
     return {
@@ -19,6 +20,17 @@ const blockStyle = computed(() => {
     }
 })
 const el = ref({} as HTMLDivElement)
+
+const modelProps = computed(() => {
+    return Object.entries(props.block.model || []).reduce((prev, [propsName, modelName]) => {
+    prev[propsName] = {
+        [propsName === 'default' ? 'modelValue' : propsName]: props.formData[modelName],
+        [propsName === 'default' ? 'onUpdate:modelValue' : 'onChange']: (value: any) => props.formData[modelName] = value
+    }
+    return prev
+}, {} as Record<string, any>)
+})
+console.log(modelProps.value, props.block.model, '-----propsmodel')
 
 onMounted(() => {
     // 拖拽放置组件时 上下左右居中

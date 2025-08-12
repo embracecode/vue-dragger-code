@@ -1,12 +1,40 @@
 <template>
-    <VisualEditor v-model="jsonData" :config="visualConfigData"></VisualEditor>
+    <VisualEditor v-model="jsonData" :formData="formData" :config="visualConfigData"></VisualEditor>
+     <!-- <Children :config="state.config"></Children>
+     <button @click="changeConfig">11111</button> -->
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import VisualEditor from './packages/visualEditor.vue'
 import { visualConfig } from './visualConfig'
 import JsonDataZindex from './edit-data.json'
+import { Children } from './packages/children'
+const configOptions = [
+    {
+        key: 'abc',
+        label: 'abc',
+        options: {
+            a: [1,2,3]
+        }
+    },
+    {
+        key: 'def',
+        label: 'def',
+        options: {
+            a: [1,2,3, 45]
+        }
+    }
+]
+const state = reactive({
+    config: computed(() => configOptions[stateIndex.value])
+})
+const stateIndex = ref(0)
+ const changeConfig = () => {
+     setTimeout(() => {
+         stateIndex.value  = 1
+     }, 0)
+ }
 // const jsonData = reactive({
 //     container: {
 //         width: 800,
@@ -27,6 +55,9 @@ import JsonDataZindex from './edit-data.json'
 //     }]
 // })
 const jsonData = reactive(JsonDataZindex)
+const formData = reactive({
+    userName: 'admin'
+})
 const visualConfigData = reactive(visualConfig)
 </script>
 

@@ -2,7 +2,7 @@ import { defer } from "@/packages/utils/defer"
 import { type VisualEditorProps } from "@/packages/visualEditor.props"
 import deepcopy from "deepcopy"
 import { ElButton, ElDialog, ElInput, ElTable, ElTableColumn } from "element-plus"
-import { createApp, defineComponent, getCurrentInstance, onMounted, reactive, type PropType } from "vue"
+import { createApp, defineComponent, getCurrentInstance, onMounted, reactive,  type PropType } from "vue"
 
 export interface TablePropsEditorServiceOptions {
     data: any[],
@@ -64,6 +64,8 @@ const ServiceComponent = defineComponent({
         }
         // @ts-ignore
         Object.assign(ctx.proxy, methods)
+        // console.log(ctx.exposed, 'ctx.exposed', ctx)
+        // ctx.exposed = methods
         return () => <ElDialog v-model={state.showFlag}>
             {{
                 default: () => (
