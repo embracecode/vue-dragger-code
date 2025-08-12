@@ -1,8 +1,9 @@
 <template>
-    <VisualEditor v-model="jsonData" :formData="formData" :config="visualConfigData"></VisualEditor>
+    <!-- <VisualEditor v-model="jsonData" :formData="formData" :config="visualConfigData"></VisualEditor>
     <div style="text-align: center;padding-top: 30px;">
         {{ JSON.stringify(formData) }}
-    </div>
+    </div> -->
+    <NumberRangeComponent v-model:start="formData.startLevel" v-model:end="formData.endLevel"></NumberRangeComponent>
      <!-- <Children :config="state.config"></Children>
      <button @click="changeConfig">11111</button> -->
 </template>
@@ -13,6 +14,7 @@ import VisualEditor from './packages/visualEditor.vue'
 import { visualConfig } from './visualConfig'
 import JsonDataZindex from './edit-data.json'
 import { Children } from './packages/children'
+import { NumberRangeComponent } from './packages/component/number-range/number-range'
 const configOptions = [
     {
         key: 'abc',
@@ -58,7 +60,10 @@ const stateIndex = ref(0)
 //     }]
 // })
 const jsonData = reactive(JsonDataZindex)
-const formData = reactive({})
+const formData = reactive({
+    startLevel: 0,
+    endLevel: 0
+})
 const visualConfigData = reactive(visualConfig)
 </script>
 
