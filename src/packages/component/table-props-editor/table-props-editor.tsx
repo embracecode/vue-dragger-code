@@ -18,8 +18,6 @@ export const TablePropsEditor = defineComponent({
         // const model = useModel(() => props.modelValue, value => emit('update:modelValue', value))
 
         const model = ref(props.modelValue)
-
-        console.log(model.value, 'model----', props.modelValue)
         const onClick = async () => {
             const data = await $$tablePropsEditor({
                 config: props.propsConfig,

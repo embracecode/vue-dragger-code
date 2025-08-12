@@ -1,5 +1,8 @@
 <template>
     <VisualEditor v-model="jsonData" :formData="formData" :config="visualConfigData"></VisualEditor>
+    <div style="text-align: center;padding-top: 30px;">
+        {{ JSON.stringify(formData) }}
+    </div>
      <!-- <Children :config="state.config"></Children>
      <button @click="changeConfig">11111</button> -->
 </template>
@@ -61,4 +64,6 @@ const formData = reactive({
 const visualConfigData = reactive(visualConfig)
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

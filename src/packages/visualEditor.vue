@@ -1,5 +1,5 @@
 <template>
-    <div :class="classes">
+    <div :class="classes" v-show="state.editing">
         <div class="visual-editor-menu">
             <div class="visual-editor-menu-item"
                 draggable="true"
@@ -56,6 +56,21 @@
             </div>
         </div> 
     </div>
+    <div v-show="!state.editing">
+        <div class="visual-editor-container"
+            :style="{...containerStyle}">
+            <VisualEditorBlock
+                :config="props.config"
+                :formData="props.formData"
+                v-for="value, index in dataModel.value.blocks"
+                :key="value.componentKey"
+                :block="value"></VisualEditorBlock>
+        </div>
+        <div class="vue-visual-container-edit-button" @click=openEdit>
+            <i class="iconfont icon-edit"/>
+            <span>编辑组件</span>
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -90,13 +105,15 @@ const containerRef = ref<HTMLDivElement>()
 const selectIndex = ref(-1)
 const state = reactive({
     selectBolck: computed(() => (dataModel.value.blocks || [])[selectIndex.value]),
-    editing: true
+    preview: true, // 是否处于预览状态
+    editing: true, // 当前是否已经开启了编辑器
+
 })
 
 const classes = computed(() => ([
     'visual-editor',
     {
-        'visual-editor-editing': state.editing
+        'visual-editor-not-preview': !state.preview
     }
 ]))
 
@@ -172,7 +189,7 @@ const blockFocusHandler = (() => {
     return {
         container: {
             onMouseDown(e: MouseEvent) {
-                if(!state.editing) return
+                if(state.preview) return
                 e.preventDefault()
                 if (e.target !== e.currentTarget) return
                 if (!e.shiftKey) {
@@ -184,7 +201,7 @@ const blockFocusHandler = (() => {
         },
         block: {
             onMouseDown(e: MouseEvent, block: VisualEditorBlockData, index: number) {
-                if(!state.editing) return
+                if(state.preview) return
                 e.stopPropagation()
                 e.preventDefault()
                 // 按shift多选 选择完之后 松开shift 在拖拽
@@ -346,6 +363,11 @@ const updateDataModel = (blocks: VisualEditorBlockData[]) => {
     dataModel.value = { ...dataModel.value, blocks }
 }
 
+// openEdit
+const openEdit = () => {
+    state.editing = true
+}
+
 // 
 const showBlockData = (block: VisualEditorBlockData) => {
     $$dialog.textarea(JSON.stringify(block), '节点数据', { editReadOnly: true })
@@ -373,7 +395,7 @@ const useCommander = useVisualCommand({
 
 const handler = {
     onContextMenuBlock: (e: MouseEvent, block: VisualEditorBlockData) => {
-        if(!state.editing) return
+        if(state.preview) return
         e.stopPropagation()
         e.preventDefault()
         $$dropdown(dropdownOptionContent(e, block, useCommander, showBlockData, importBlockData))
@@ -388,13 +410,13 @@ const buttons = [
         label: '重做', icon: 'icon-forward', handler: () => useCommander.redo(), tip: 'Ctrl + Y, Ctrl + Shift + Z'
     },
     {
-        label: () => !state.editing ? '编辑' : '预览',
-        icon: () => !state.editing ? 'icon-edit' : 'icon-browse',
+        label: () => state.preview ? '编辑' : '预览',
+        icon: () => state.preview ? 'icon-edit' : 'icon-browse',
         handler: () => {
-            if (!state.editing) {
+            if (!state.preview) {
                 clearFocusedBlock()
             }
-            state.editing = !state.editing
+            state.preview = !state.preview
         },
     },
     {
@@ -423,6 +445,12 @@ const buttons = [
     },
     {
         label: '清空', icon: 'icon-reset', handler: () => useCommander.clear()
+    },
+    {
+        label: '关闭', icon: 'icon-close', handler: () => {
+            clearFocusedBlock()
+            state.editing = false
+        },
     },
 ]
 
@@ -562,36 +590,9 @@ $pramary: #409eff; // 主要颜色
             display: flex;
             justify-content: center;
             overflow-y: auto;
-            .visual-editor-container {
-                background-color: white;
-                position: relative;
-                .visual-editor-block {
-                    position: absolute;
-                    :deep(.el-select) {
-                        width: 194px;
-                    }
-                }
-                .visual-editor-block-focus {
-                    &::after {
-                        border: 1px dashed $pramary;
-                    }
-                }
-                .visual-editor-mark-line-y {
-                    position: absolute;
-                    left:0;
-                    right:0;
-                    border-top: 1px dashed $pramary;
-                }
-                .visual-editor-mark-line-x {
-                    position: absolute;
-                    top:0;
-                    bottom:0;
-                    border-left: 1px dashed $pramary;
-                }
-            }
         }
     }
-    &.visual-editor-editing {
+    &.visual-editor-not-preview {
         & > .visual-editor-body {
             .visual-editor-container {
                 border: 1px dashed $pramary;
@@ -605,6 +606,61 @@ $pramary: #409eff; // 主要颜色
                 }
             }
         }
+    }
+}
+.visual-editor-container {
+    background-color: white;
+    position: relative;
+    .visual-editor-block {
+        position: absolute;
+        :deep(.el-select) {
+            width: 194px;
+        }
+    }
+    .visual-editor-block-focus {
+        &::after {
+            border: 1px dashed $pramary;
+        }
+    }
+    .visual-editor-mark-line-y {
+        position: absolute;
+        left:0;
+        right:0;
+        border-top: 1px dashed $pramary;
+    }
+    .visual-editor-mark-line-x {
+        position: absolute;
+        top:0;
+        bottom:0;
+        border-left: 1px dashed $pramary;
+    }
+}
+.vue-visual-container-edit-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: black;
+    padding: 6px 16px;
+    border: dashed 1px gray;
+    user-select: none;
+
+    &:hover {
+        background-color: $ibl;
+        cursor: pointer;
+        border-style: solid;
+    }
+
+    &:active {
+        background-color: $ibc;
+    }
+
+    & > i {
+        font-size: 16px;
+        margin-right: 4px;
+    }
+
+    & > span {
+        font-size: 14px;
     }
 }
 </style>
