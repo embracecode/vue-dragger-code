@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue'
+import { defineComponent, watch } from 'vue'
 import './number-range.scss'
 import { useModel } from '@/packages/utils/useModel'
 import { ElInput } from 'element-plus'
@@ -6,12 +6,12 @@ import { ElInput } from 'element-plus'
 
 export const NumberRangeComponent = defineComponent({
     props: {
-        start: {type: [String, Number], required: true},
-        end: {type: [String, Number], required: true}
+        start: {type: [String, Number], required: true, default: ''},
+        end: {type: [String, Number], required: true, default: ''}
     },
     emits: {
-        'update:start': (value: string) => true,
-        'update:end': (value: string) => true
+        'update:start': (value: any) => true,
+        'update:end': (value: any) => true
     },
     setup(props, { emit }) {
 
@@ -19,6 +19,13 @@ export const NumberRangeComponent = defineComponent({
         const startModel = useModel(() => props.start, value => emit('update:start', value))
         // @ts-ignore
         const endModel = useModel(() => props.end, value => emit('update:end', value))
+
+        watch(() => props.start, val => {
+            console.log(val, 'props.start')
+        })
+        watch(() => props.end, val => {
+            console.log(val, 'props.end')
+        })
 
         return () => (
             <div class="number-range">

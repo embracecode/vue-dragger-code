@@ -22,15 +22,15 @@ const blockStyle = computed(() => {
 const el = ref({} as HTMLDivElement)
 
 const modelProps = computed(() => {
-    return Object.entries(props.block.model || []).reduce((prev, [propsName, modelName]) => {
-    prev[propsName] = {
-        [propsName === 'default' ? 'modelValue' : propsName]: props.formData[modelName],
-        [propsName === 'default' ? 'onUpdate:modelValue' : 'onChange']: (value: any) => props.formData[modelName] = value
-    }
-    return prev
-}, {} as Record<string, any>)
+    return Object.keys(currentComp.model || []).reduce((prev, propsName) => {
+        const modelName = props.block.model![propsName]
+        prev[propsName] = {
+            [propsName === 'default' ? 'modelValue' : propsName]: !!modelName ? props.formData[modelName] : null,
+            [propsName === 'default' ? 'onUpdate:modelValue' : 'onChange']: (value: any) => props.formData[modelName] = value
+        }
+        return prev
+    }, {} as Record<string, any>)
 })
-console.log(modelProps.value, props.block.model, '-----propsmodel')
 
 onMounted(() => {
     // 拖拽放置组件时 上下左右居中

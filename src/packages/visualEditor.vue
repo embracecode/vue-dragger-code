@@ -489,6 +489,8 @@ $pramary: #409eff; // 主要颜色
         bottom: 0;
         background-color: white;
         z-index: 9;
+        overflow-y: auto;
+        padding-bottom: 200px;
         .visual-editor-menu-item {
             position: relative;
             width: calc(100% - 20px);

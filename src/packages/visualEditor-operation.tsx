@@ -29,6 +29,7 @@ export const VisualEditorOperation = defineComponent({
                     const newBlock = state.editData
                     props.updateBlock(newBlock, props.block)
                 }
+                console.log(props.dataModel, 'dataModel')
             },
             reset: () => {
                 if (!props.block) {

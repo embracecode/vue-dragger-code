@@ -1,3 +1,4 @@
+import { NumberRangeComponent } from "./packages/component/number-range/number-range";
 import { createColorProps, createInputProps, createSelectProps, createTableProps } from "./packages/visualEditor.props";
 import { createVisualEditorConfig } from "./packages/visualEditor.utils";
 import { ElButton, ElInput, ElOption, ElSelect } from "element-plus";
@@ -72,5 +73,23 @@ visualConfig.register('input', {
     },
     model: {
         default: '绑定字段'
+    }
+})
+
+visualConfig.register('number-range', {
+    label: '数字范围',
+    preview: () => <NumberRangeComponent start={1} end={10}></NumberRangeComponent>,
+    render: ({ model }) => {
+        console.log(model.start, 'number-range', model.end, 'model.end')
+        return <NumberRangeComponent {...{ 
+            start: model.start?.value,
+            'onUpdate:start': (value: string) => model.start?.onChange,
+            end: model.end?.value,
+            'onUpdate:end': (value: string) => model.end?.onChange
+        }}></NumberRangeComponent>
+    },
+    model: {
+        start: '起始绑定字段',
+        end: '结束绑定字段'
     }
 })

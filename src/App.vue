@@ -1,9 +1,9 @@
 <template>
-    <!-- <VisualEditor v-model="jsonData" :formData="formData" :config="visualConfigData"></VisualEditor>
+    <VisualEditor v-model="jsonData" :formData="formData" :config="visualConfigData"></VisualEditor>
     <div style="text-align: center;padding-top: 30px;">
         {{ JSON.stringify(formData) }}
-    </div> -->
-    <NumberRangeComponent v-model:start="formData.startLevel" v-model:end="formData.endLevel"></NumberRangeComponent>
+    </div>
+    <!-- <NumberRangeComponent v-model:start="formData.startLevel" v-model:end="formData.endLevel"></NumberRangeComponent> -->
      <!-- <Children :config="state.config"></Children>
      <button @click="changeConfig">11111</button> -->
 </template>
