@@ -1,6 +1,6 @@
 import { onUnmounted, reactive } from "vue"
 import { KeyboardCode } from "./keyboard-code"
-import { debounce } from 'lodash'
+import { debounce, throttle } from 'lodash'
 
 export interface CommandExecute {
     undo?: () => void,
@@ -41,14 +41,14 @@ export function useCommander() {
                 if (!keyBoard) return
                 const keys = Array.isArray(keyBoard) ? keyBoard : [keyBoard]
                 if (keys.indexOf(keyNames) > -1) {
-                    state.commands[name]()
                     e.stopPropagation()
                     e.preventDefault()
+                    state.commands[name]()
                 }
             })
         }
-
-        const onKeydownDebounce = debounce(onKeydown, 100)
+        // 想着用
+        const onKeydownDebounce = throttle(onKeydown, 100)
         const init = () => {
             window.addEventListener('keydown', onKeydownDebounce)
             return () => window.removeEventListener('keydown', onKeydownDebounce)

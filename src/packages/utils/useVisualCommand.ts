@@ -41,9 +41,7 @@ export function useVisualCommand(
 
     commander.registerCommand({
         name: 'clear',
-        keyBoard: [
-            'ctrl+a'
-        ],
+        keyBoard: [],
         execute: () => {
             let data = {
                 before: dataModel.value.blocks || [],
@@ -186,6 +184,19 @@ export function useVisualCommand(
                 },
                 redo: () => {
                     dataModel.value = deepcopy(data.after)
+                }
+            }
+        }
+    })
+
+    commander.registerCommand({
+        name: 'selectAll',
+        keyBoard: 'ctrl+a',
+        followQueue: false,
+        execute: () => {
+            return {
+                redo: () => {
+                    (dataModel.value.blocks || []).forEach(item => item.focus = true)
                 }
             }
         }
