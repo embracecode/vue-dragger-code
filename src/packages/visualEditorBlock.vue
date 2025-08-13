@@ -1,19 +1,24 @@
 <template>
     <div :class="classes" :style="{...blockStyle}" ref="el">
-       <component :is="currentComp.render({ props: props.block.props || {}, model: modelProps || {}, size: sizeProps || {}})"></component>
+        <!-- 显示插槽内容 根据组建的绑定字段显示 -->
+        <component v-if="!!props.block.slotName && !!props.slots[props.block.slotName]" :is="renderSlot"></component>
+        <component v-else :is="currentComp.render({ props: props.block.props || {}, model: modelProps || {}, size: sizeProps || {}})"></component>
+       
+
        <component v-if="!!props.block.focus && (!!resizeWidthValue || !!resizeHeightValue)"
        :is="BlockResizeComponent" :block="props.block" :component="currentComp" ></component>
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, onMounted, type Slot } from 'vue'
 import type { VisualEditorBlockData, VisualEditorConfig } from './visualEditor.utils'
 import { BlockResizeComponent } from './component/block-resize/block-resize'
 const props = defineProps<{
     block: VisualEditorBlockData,
     config: VisualEditorConfig,
-    formData: Record<string, any>
+    formData: Record<string, any>,
+    slots: Record<string, Slot | undefined>
 }>()
 const blockStyle = computed(() => {
     return {
@@ -39,7 +44,6 @@ const sizeProps = computed(() => {
     const result = props.block.hasResize ? { width: props.block.width, height: props.block.height } : {}
     return result
 })
-
 onMounted(() => {
     // 拖拽放置组件时 上下左右居中
     const block = props.block
@@ -55,6 +59,14 @@ onMounted(() => {
 const currentComp = props.config.componentMap[props.block.componentKey]
 
 const { width: resizeWidthValue, height:resizeHeightValue } = currentComp.resize || {}
+
+const renderSlot = computed(() => {
+    let render:any
+    if (!!props.block.slotName && !!props.slots[props.block.slotName]) {
+        render = props.slots[props.block.slotName]!
+    }
+    return render
+})
 // 容器内选择物料时增加虚线
 const classes = computed(() => [
     'visual-editor-block',

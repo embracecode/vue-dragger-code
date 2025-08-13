@@ -16,7 +16,7 @@
         "props": {},
         "model": {}
     }, {
-        "top": 141,
+        "top": 140,
         "left": 424.5,
         "componentKey": "button",
         "adjustPosition": false,
@@ -26,7 +26,8 @@
         "height": 32,
         "hasResize": false,
         "props": {},
-        "model": {}
+        "model": {},
+        "slotName": "subBtn"
     }, {
         "top": 215,
         "left": 42,
@@ -51,15 +52,17 @@
         "hasResize": false,
         "props": {
             "options": [{
-                "label": "123",
-                "field": "123",
+                "label": "蛋糕",
+                "field": "dangao",
                 "comments": "123"
             }, {
-                "label": "456",
-                "field": "456",
+                "label": "学兵",
+                "field": "xuebing",
                 "comments": "456"
             }]
         },
-        "model": {}
+        "model": {
+            "default": "food"
+        }
     }]
 }

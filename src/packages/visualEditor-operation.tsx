@@ -78,7 +78,9 @@ export const VisualEditorOperation = defineComponent({
                 const { componentKey } = props.block
                 const component = props.config.componentMap[componentKey]
                 // console.log(component.props, 'component.props', component.model, 'component.model')
-
+                content.push(<ElFormItem label="组件标识">
+                    <ElInput v-model={state.editData.slotName}></ElInput>
+                </ElFormItem>)
                 if (!!component) {
                     if (!!component.props) {
                         content.push(<>

@@ -12,7 +12,8 @@ export interface VisualEditorBlockData {
     height: number, // 组件高
     hasResize?: boolean, // 是否调整过宽高
     props?: Record<string, any> // 组件的设计属性
-    model: Record<string, string> // 组件的绑定字段
+    model: Record<string, any> // 组件的绑定字段
+    slotName?: string // 组件唯一标识
 }
 
 
@@ -31,7 +32,7 @@ export interface VisualEditorComponent {
     preview: () => JSX.Element,
     render: (data: { props: any, model: any, size: { width?: number, height?: number } }) => JSX.Element,
     props?: Record<string, VisualEditorProps>,
-    model?: Record<string, string>,
+    model?: Record<string, any>,
     resize?: {
         width?: boolean,    
         height?: boolean

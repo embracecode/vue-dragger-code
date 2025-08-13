@@ -1,5 +1,10 @@
 <template>
-    <VisualEditor v-model="jsonData" :formData="formData" :config="visualConfigData"></VisualEditor>
+    <VisualEditor v-model="jsonData" :formData="formData" :config="visualConfigData">
+        <template #subBtn>
+            <el-button v-if="formData.food === 'dangao'">自定义按钮</el-button>
+            <el-tag disable-transitions v-else>2222</el-tag>
+        </template>
+    </VisualEditor>
     <div style="text-align: center;padding-top: 30px;">
         {{ JSON.stringify(formData) }}
     </div>
@@ -60,7 +65,7 @@ const stateIndex = ref(0)
 //     }]
 // })
 const jsonData = reactive(JsonDataZindex)
-const formData = reactive({
+const formData = reactive<any>({
     startLevel: 0,
     endLevel: 0
 })

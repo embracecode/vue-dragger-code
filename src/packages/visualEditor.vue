@@ -49,7 +49,8 @@
                         :formData="props.formData"
                         v-for="value, index in dataModel.value.blocks"
                         :key="value.componentKey"
-                        :block="value"></VisualEditorBlock>
+                        :block="value"
+                        :slots="slots"></VisualEditorBlock>
                     <div v-if="blockDragger.mark.y !== null" :style="`top: ${blockDragger.mark.y}px`" class="visual-editor-mark-line-y"></div>
                     <div v-if="blockDragger.mark.x !== null" :style="`left: ${blockDragger.mark.x}px`" class="visual-editor-mark-line-x"></div>
                 </div>
@@ -64,7 +65,8 @@
                 :formData="props.formData"
                 v-for="value, index in dataModel.value.blocks"
                 :key="value.componentKey"
-                :block="value"></VisualEditorBlock>
+                :block="value"
+                :slots="slots"></VisualEditorBlock>
         </div>
         <div class="vue-visual-container-edit-button" @click=openEdit>
             <i class="iconfont icon-edit"/>
@@ -74,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, reactive, type PropType } from 'vue'
+import { computed, ref, reactive, type PropType, useSlots } from 'vue'
 import { createNewBlock, type VisualEditorModelValue, type VisualEditorConfig, type VisualEditorMarkLine, type VisualEditorBlockData, type VisualEditorComponent } from './visualEditor.utils'
 import { useModel } from './utils/useModel'
 import { useVisualCommand } from './utils/useVisualCommand'
@@ -92,6 +94,7 @@ const props = defineProps<{
 const emit = defineEmits<{
     (e: 'update:modelValue', value: VisualEditorModelValue): Boolean
 }>()
+const slots = useSlots()
 // 双向绑定容器中的组件数据
 const dataModel = useModel(() => props.modelValue, value => emit('update:modelValue', value))
 
