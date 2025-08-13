@@ -601,6 +601,9 @@ $pramary: #409eff; // 主要颜色
                 border: 1px dashed $pramary;
                 box-sizing: border-box;
                 .visual-editor-block {
+                    :deep(.el-button, .el-input, .el-select) {
+                        transition: none;
+                    }
                     &:after {
                         content: '';
                         position: absolute;
