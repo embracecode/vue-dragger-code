@@ -82,10 +82,10 @@ visualConfig.register('number-range', {
     render: ({ model }) => {
         console.log(model.start, 'number-range', model.end, 'model.end')
         return <NumberRangeComponent {...{ 
-            start: model.start?.value,
-            'onUpdate:start': (value: string) => model.start?.onChange,
-            end: model.end?.value,
-            'onUpdate:end': (value: string) => model.end?.onChange
+            start: model.start.value,
+            'onUpdate:start': model.start.onChange,
+            end: model.end.value,
+            'onUpdate:end': model.end.onChange
         }}></NumberRangeComponent>
     },
     model: {

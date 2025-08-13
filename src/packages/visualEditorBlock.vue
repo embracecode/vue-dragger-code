@@ -26,7 +26,7 @@ const modelProps = computed(() => {
         const modelName = props.block.model![propsName]
         prev[propsName] = {
             [propsName === 'default' ? 'modelValue' : propsName]: !!modelName ? props.formData[modelName] : null,
-            [propsName === 'default' ? 'onUpdate:modelValue' : 'onChange']: (value: any) => props.formData[modelName] = value
+            [propsName === 'default' ? 'onUpdate:modelValue' : `onChange`]: (value: any) => props.formData[modelName] = value
         }
         return prev
     }, {} as Record<string, any>)

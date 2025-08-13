@@ -6,8 +6,8 @@ import { ElInput } from 'element-plus'
 
 export const NumberRangeComponent = defineComponent({
     props: {
-        start: {type: [String, Number], required: true, default: ''},
-        end: {type: [String, Number], required: true, default: ''}
+        start: {type: [String, Number], default: ''},
+        end: {type: [String, Number], default: ''}
     },
     emits: {
         'update:start': (value: any) => true,
