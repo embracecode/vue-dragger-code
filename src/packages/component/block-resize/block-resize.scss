@@ -1,0 +1,48 @@
+
+@use "sass:math";
+
+$space: 6px;
+$size: 6px;
+.block-resize {
+    position: absolute;
+    inset: -$space;
+    width: $size;
+    height: $size;
+    background-color: #409eff;
+    &.block-resize-top {
+        left: calc(50% - #{math.div($size, 2)});
+        right: initial;
+        bottom: initial;
+    }
+    &.block-resize-bottom {
+        left: calc(50% - #{math.div($size, 2)});
+        right: initial;
+        top: initial;
+    }
+    &.block-resize-left {
+        top: calc(50% - #{math.div($size, 2)});
+        right: initial;
+        bottom: initial;
+    }
+    &.block-resize-right {
+        top: calc(50% - #{math.div($size, 2)});
+        left: initial;
+        bottom: initial;
+    }
+    &.block-resize-top-left {
+        right: initial;
+        bottom: initial;
+    }
+    &.block-resize-top-right {
+        left: initial;
+        bottom: initial;
+    }
+    &.block-resize-bottom-left {
+        right: initial;
+        top: initial;
+    }
+    &.block-resize-bottom-right {
+        left: initial;
+        top: initial;
+    }
+}

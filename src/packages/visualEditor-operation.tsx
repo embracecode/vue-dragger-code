@@ -77,7 +77,7 @@ export const VisualEditorOperation = defineComponent({
 
                 const { componentKey } = props.block
                 const component = props.config.componentMap[componentKey]
-                console.log(component.props, 'component.props', component.model, 'component.model')
+                // console.log(component.props, 'component.props', component.model, 'component.model')
 
                 if (!!component) {
                     if (!!component.props) {

@@ -29,9 +29,13 @@ export interface VisualEditorComponent {
     key: string,
     label: string,
     preview: () => JSX.Element,
-    render: (data: { props: any, model: any }) => JSX.Element,
+    render: (data: { props: any, model: any, size: { width?: number, height?: number } }) => JSX.Element,
     props?: Record<string, VisualEditorProps>,
-    model?: Record<string, string>
+    model?: Record<string, string>,
+    resize?: {
+        width?: boolean,    
+        height?: boolean
+    }
 }
 
 export interface VisualEditorMarkLine {
@@ -69,9 +73,15 @@ export function createVisualEditorConfig() {
             preview: () => JSX.Element,
             render: (data: { 
                 props: { [key in keyof Props]: any }, 
-                model: Partial<{ [key in keyof Model]?: any }> }) => JSX.Element,
+                model: Partial<{ [key in keyof Model]?: any }>,
+                size: { width?: number, height?: number }
+             }) => JSX.Element,
             props?: Props,
-            model?: Model
+            model?: Model,
+            resize?: {
+                width?: boolean,    
+                height?: boolean
+            }
         }) {
             let comp = {...component, key}
             componentList.push(comp)

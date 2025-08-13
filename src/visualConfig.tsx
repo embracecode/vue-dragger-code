@@ -21,7 +21,11 @@ visualConfig.register('text', {
 visualConfig.register('button', {
     label: '按钮',
     preview: () => <ElButton>按钮</ElButton>,
-    render: ({ props }) => <ElButton type={props.type} size={props.size}>{ props.text || '按钮' }</ElButton>,
+    render: ({ props, size }) => <ElButton style={{ width: `${size.width}px`, height: `${size.height}px` }} type={props.type} size={props.size}>{ props.text || '按钮' }</ElButton>,
+    resize: {
+        width: true,
+        height: true
+    },
     props: {
         text: createInputProps('显示文本'),
         type: createSelectProps('按钮类型', [
@@ -67,9 +71,12 @@ visualConfig.register('select', {
 visualConfig.register('input', {
     label: '输入框',
     preview: () => <ElInput/>,
-    render: ( { model } ) => {
+    render: ( { model,size } ) => {
         console.log(model, 'input')
-        return <ElInput {...model.default}></ElInput>
+        return <ElInput {...model.default} style={{ width: `${size.width}px`, height: `${size.height}px` }}></ElInput>
+    },
+    resize: {
+        width: true
     },
     model: {
         default: '绑定字段'
@@ -79,14 +86,17 @@ visualConfig.register('input', {
 visualConfig.register('number-range', {
     label: '数字范围',
     preview: () => <NumberRangeComponent start={1} end={10}></NumberRangeComponent>,
-    render: ({ model }) => {
+    render: ({ model, size }) => {
         console.log(model.start, 'number-range', model.end, 'model.end')
         return <NumberRangeComponent {...{ 
             start: model.start.value,
             'onUpdate:start': model.start.onChange,
             end: model.end.value,
             'onUpdate:end': model.end.onChange
-        }}></NumberRangeComponent>
+        }} style={{ width: `${size.width}px`, height: `${size.height}px` }}></NumberRangeComponent>
+    },
+    resize: {
+        width: true
     },
     model: {
         start: '起始绑定字段',
