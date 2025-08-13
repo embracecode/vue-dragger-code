@@ -29,7 +29,7 @@
         </div>
         <!-- 不加key  在切换选中的时候 会无法更新属性绑定的界面 很奇怪的问题  在app.vue 中模拟了一下这个场景发现 children组件会重新渲染 在这里不行-->
         <VisualEditorOperation
-            :key="state.selectBolck?.top ? state.selectBolck?.top : '0'"
+            :key="VisualEditorOperationKey"
             :block="state.selectBolck"
             :config="props.config"
             :dataModel="dataModel" 
@@ -122,6 +122,14 @@ const classes = computed(() => ([
         'visual-editor-not-preview': !state.preview
     }
 ]))
+
+const VisualEditorOperationKey = computed(() => {
+    let result: any
+    let top = state.selectBolck?.top || 0
+    let left = state.selectBolck?.left || 0
+    result = top + left + Math.random()
+    return result
+})
 
 // 计算选中与未选中的block数据
 const focusData = computed(() => {
