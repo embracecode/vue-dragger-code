@@ -495,6 +495,23 @@ $pramary: #409eff; // 主要颜色
         inset: 0;
         background-color: rgba(#999, .2);
     }
+    & >.visual-editor-menu, & >.visual-editor-body>.visual-editor-content, & >.visual-editor-operator {
+        //自动移滚动条样式
+        &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+        border-radius: 1em;
+        background-color: rgba(black, 0.15);
+        }
+
+        &::-webkit-scrollbar-track {
+        border-radius: 1em;
+        background-color: transparent;
+        }
+    }
     & > .visual-editor-menu {
         position: absolute;
         width: $menuSize;
