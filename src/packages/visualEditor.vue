@@ -593,6 +593,9 @@ $pramary: #409eff; // 主要颜色
         :deep(.el-input-number) {
             width: 100%;
         }
+        :deep(.el-tag) {
+            margin-right: 5px;
+        }
     }
     & > .visual-editor-body {
         padding-top: $headSize + 10;

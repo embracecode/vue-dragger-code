@@ -1,7 +1,8 @@
 import { NumberRangeComponent } from "./packages/component/number-range/number-range";
 import { createColorProps, createInputProps, createSelectProps, createTableProps } from "./packages/visualEditor.props";
 import { createVisualEditorConfig } from "./packages/visualEditor.utils";
-import { ElButton, ElInput, ElOption, ElSelect } from "element-plus";
+import { ElButton, ElIcon, ElInput, ElOption, ElSelect } from "element-plus";
+import { Picture} from '@element-plus/icons-vue'
 export const visualConfig = createVisualEditorConfig()
 
 visualConfig.register('text', {
@@ -106,4 +107,29 @@ visualConfig.register('number-range', {
         start: '起始绑定字段',
         end: '结束绑定字段'
     }
+})
+
+visualConfig.register('image', {
+    label: '图片',
+    resize: {
+        width: true,
+        height: true,
+    },
+    render: ({props, size}) => {
+        return (
+            <div style={{height: `${size.height || 100}px`, width: `${size.width || 100}px`}} class="visual-block-image">
+                <img src={props.url || 'https://cn.vuejs.org/images/logo.png'}/>
+            </div>
+        )
+    },
+    preview: () => (
+        <div style="text-align:center;">
+            <div style="font-size:20px;background-color:#f2f2f2;color:#ccc;display:inline-flex;width:100px;height:50px;align-items:center;justify-content:center">
+                <ElIcon><Picture /></ElIcon>
+            </div>
+        </div>
+    ),
+    props: {
+        url: createInputProps('图片地址')
+    },
 })

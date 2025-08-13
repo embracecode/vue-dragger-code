@@ -83,6 +83,14 @@ const classes = computed(() => [
 ])
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.visual-block-image {
+    img {
+        object-fit: fill;
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+}
 
 </style>
