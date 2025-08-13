@@ -1,7 +1,7 @@
 import { defineComponent, type PropType } from "vue"
 import './block-resize.scss'
 import type { VisualEditorBlockData, VisualEditorComponent } from "@/packages/visualEditor.utils"
-
+import { VisualDragProvider } from "@/packages/utils/provider"
 enum Direction {
     start = 'start',
     center = 'center',
@@ -15,7 +15,7 @@ export const BlockResizeComponent = defineComponent({
     },
     setup(props) {
         console.log(props.block, 'props.block', props.component)
-
+        const { dragStart, dragEnd } = VisualDragProvider.inject()
         const omMouseDown = (() => {
             let data = {
                 startX: 0,
@@ -24,7 +24,8 @@ export const BlockResizeComponent = defineComponent({
                 startHeight: 0,
                 startTop: 0,
                 startLeft: 0,
-                direction: { horzontal: Direction.start, vertical: Direction.start }
+                direction: { horzontal: Direction.start, vertical: Direction.start },
+                dragging: false
             }
             const mouseDown = (e: MouseEvent, direction: { horzontal: Direction, vertical: Direction }) => {
                 e.stopPropagation()
@@ -37,15 +38,19 @@ export const BlockResizeComponent = defineComponent({
                     startHeight: props.block.height,
                     startTop: props.block.top,
                     startLeft: props.block.left,
-                    direction
+                    direction,
+                    dragging: false
                 }
             }
             const mouseMove = (e: MouseEvent) => {
-                let { startX, startY, startWidth, startHeight, startTop, startLeft, direction } = data
+                let { startX, startY, startWidth, startHeight, startTop, startLeft, direction, dragging } = data
+                if (!dragging) {
+                    data.dragging = true
+                    dragStart.emit()
+                }
                 let { clientX: moveX, clientY: moveY } = e
                 if (direction.horzontal === Direction.center) {
                     moveX = startX
-
                 }
                 if (direction.vertical === Direction.center) {
                     moveY = startY
@@ -69,6 +74,9 @@ export const BlockResizeComponent = defineComponent({
             const mouseUp = (e: MouseEvent) => {
                 document.removeEventListener('mousemove', mouseMove)
                 document.removeEventListener('mouseup', mouseUp)
+                if (data.dragging) {
+                    dragEnd.emit()
+                }
             }
             return mouseDown
         })()

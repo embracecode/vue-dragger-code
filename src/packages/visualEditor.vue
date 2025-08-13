@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, reactive, type PropType, useSlots } from 'vue'
+import { computed, ref, reactive, type PropType, useSlots, provide, inject } from 'vue'
 import { createNewBlock, type VisualEditorModelValue, type VisualEditorConfig, type VisualEditorMarkLine, type VisualEditorBlockData, type VisualEditorComponent } from './visualEditor.utils'
 import { useModel } from './utils/useModel'
 import { useVisualCommand } from './utils/useVisualCommand'
@@ -88,6 +88,8 @@ import { VisualEditorOperation } from './visualEditor-operation'
 import { $$dialog } from './utils/dialog-service'
 import { $$dropdown, dropdownOptionContent } from './utils/dropdown-service'
 import { ElMessageBox } from 'element-plus'
+// @ts-ignore
+import { VisualDragProvider } from './utils/provider'
 const props = defineProps<{
     modelValue: VisualEditorModelValue,
     config: VisualEditorConfig,
@@ -147,6 +149,10 @@ const focusData = computed(() => {
 // 增加拖拽时的事件监听  使其能触发撤销 重做
 const dragStart = createEvent()
 const dragEnd = createEvent()
+VisualDragProvider.provide({
+    dragStart,
+    dragEnd
+})
 
 
 // 左侧物料拖拽至容器时的动作

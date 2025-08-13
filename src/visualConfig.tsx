@@ -23,7 +23,7 @@ visualConfig.register('button', {
     label: '按钮',
     preview: () => <ElButton>按钮</ElButton>,
     render: ({ props, size, custom }) => 
-    <ElButton style={{ width: `${size.width}px`, height: `${size.height}px` }}
+    <ElButton style={{ width: !!size.width ? `${size.width}px` : null, height: !!size.height ? `${size.height}px` : null }}
         type={props.type} size={props.size}
         {...custom}
         >{ props.text || '按钮' }</ElButton>,
@@ -78,7 +78,12 @@ visualConfig.register('input', {
     preview: () => <ElInput/>,
     render: ( { model,size, custom } ) => {
         console.log(model, 'input')
-        return <ElInput {...model.default} {...custom} style={{ width: `${size.width}px`, height: `${size.height}px` }}></ElInput>
+        return <ElInput {...model.default}
+                    {...custom} 
+                    style={{ 
+                        width: !!size.width ? `${size.width}px` : null, 
+                        height: !!size.height ? `${size.height}px` : null 
+                    }}></ElInput>
     },
     resize: {
         width: true
@@ -98,7 +103,7 @@ visualConfig.register('number-range', {
             'onUpdate:start': model.start.onChange,
             end: model.end.value,
             'onUpdate:end': model.end.onChange
-        }} style={{ width: `${size.width}px`, height: `${size.height}px` }}></NumberRangeComponent>
+        }} style={{ width:  !!size.width ? `${size.width}px` : null, height: !!size.height ? `${size.height}px` : null }}></NumberRangeComponent>
     },
     resize: {
         width: true
