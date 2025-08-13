@@ -2,7 +2,7 @@
     <div :class="classes" :style="{...blockStyle}" ref="el">
         <!-- 显示插槽内容 根据组建的绑定字段显示 -->
         <component v-if="!!props.block.slotName && !!props.slots[props.block.slotName]" :is="renderSlot"></component>
-        <component v-else :is="currentComp.render({ props: props.block.props || {}, model: modelProps || {}, size: sizeProps || {}})"></component>
+        <component v-else :is="currentComp.render({ props: props.block.props || {}, model: modelProps || {}, size: sizeProps || {}, custom: customPropsValue})"></component>
        
 
        <component v-if="!!props.block.focus && (!!resizeWidthValue || !!resizeHeightValue)"
@@ -18,7 +18,8 @@ const props = defineProps<{
     block: VisualEditorBlockData,
     config: VisualEditorConfig,
     formData: Record<string, any>,
-    slots: Record<string, Slot | undefined>
+    slots: Record<string, Slot | undefined>,
+    customProps?: Record<string, any>
 }>()
 const blockStyle = computed(() => {
     return {
@@ -66,6 +67,11 @@ const renderSlot = computed(() => {
         render = props.slots[props.block.slotName]!
     }
     return render
+})
+
+const customPropsValue = computed(() => {
+    // @ts-ignore
+    return (!props.block.slotName && !props.customProps) ? {} : (props.customProps[props.block.slotName] || {})
 })
 // 容器内选择物料时增加虚线
 const classes = computed(() => [

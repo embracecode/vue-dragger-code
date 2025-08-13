@@ -1,9 +1,9 @@
 <template>
-    <VisualEditor v-model="jsonData" :formData="formData" :config="visualConfigData">
-        <template #subBtn>
+    <VisualEditor v-model="jsonData" :formData="formData" :customProps="customProps" :config="visualConfigData">
+        <!-- <template #subBtn>
             <el-button v-if="formData.food === 'dangao'">自定义按钮</el-button>
             <el-tag disable-transitions v-else>2222</el-tag>
-        </template>
+        </template> -->
     </VisualEditor>
     <div style="text-align: center;padding-top: 30px;">
         {{ JSON.stringify(formData) }}
@@ -20,6 +20,7 @@ import { visualConfig } from './visualConfig'
 import JsonDataZindex from './edit-data.json'
 import { Children } from './packages/children'
 import { NumberRangeComponent } from './packages/component/number-range/number-range'
+import { ElNotification } from 'element-plus'
 const configOptions = [
     {
         key: 'abc',
@@ -68,6 +69,25 @@ const jsonData = reactive(JsonDataZindex)
 const formData = reactive<any>({
     startLevel: 0,
     endLevel: 0
+})
+const customProps = reactive({
+    // 属性值和组件标识绑定
+    subBtn: {
+        onClick: () => {
+            ElNotification({
+                message: '执行表单校验以及提交到服务器的动作'
+            })
+        }
+    },
+    mySelect: {
+        onChange: (e: any) => {
+            console.log(e, 'eeeee')
+            ElNotification({
+                message: '选择了一个选项' + e
+            })
+            formData.acctype = null
+        }
+    }
 })
 const visualConfigData = reactive(visualConfig)
 </script>

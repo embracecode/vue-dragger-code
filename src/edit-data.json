@@ -29,23 +29,34 @@
         "model": {},
         "slotName": "subBtn"
     }, {
-        "top": 215,
-        "left": 42,
+        "top": 247,
+        "left": 530,
         "componentKey": "select",
         "adjustPosition": false,
-        "focus": false,
+        "focus": true,
         "zIndex": 0,
         "width": 194,
         "height": 32,
         "hasResize": false,
-        "props": {},
-        "model": {}
+        "props": {
+            "options": [{
+                "label": "经销商",
+                "field": "jingxiao",
+                "comments": "132"
+            }, {
+                "label": "顶顶顶",
+                "field": "ddd"
+            }]
+        },
+        "model": {
+            "default": "acctype"
+        }
     }, {
-        "top": 237,
-        "left": 501,
+        "top": 247,
+        "left": 289.5,
         "componentKey": "select",
         "adjustPosition": false,
-        "focus": true,
+        "focus": false,
         "zIndex": 0,
         "width": 194,
         "height": 32,
@@ -63,6 +74,7 @@
         },
         "model": {
             "default": "food"
-        }
+        },
+        "slotName": "mySelect"
     }]
 }

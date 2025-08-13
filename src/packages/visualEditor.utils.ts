@@ -30,7 +30,7 @@ export interface VisualEditorComponent {
     key: string,
     label: string,
     preview: () => JSX.Element,
-    render: (data: { props: any, model: any, size: { width?: number, height?: number } }) => JSX.Element,
+    render: (data: { props: any, model: any, size: { width?: number, height?: number }, custom: Record<string, any> }) => JSX.Element,
     props?: Record<string, VisualEditorProps>,
     model?: Record<string, any>,
     resize?: {
@@ -75,7 +75,8 @@ export function createVisualEditorConfig() {
             render: (data: { 
                 props: { [key in keyof Props]: any }, 
                 model: Partial<{ [key in keyof Model]?: any }>,
-                size: { width?: number, height?: number }
+                size: { width?: number, height?: number },
+                custom: Record<string, any>
              }) => JSX.Element,
             props?: Props,
             model?: Model,

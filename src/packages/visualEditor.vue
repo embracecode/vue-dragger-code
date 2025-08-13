@@ -50,7 +50,8 @@
                         v-for="value, index in dataModel.value.blocks"
                         :key="value.componentKey"
                         :block="value"
-                        :slots="slots"></VisualEditorBlock>
+                        :slots="slots"
+                        :customProps="props.customProps"></VisualEditorBlock>
                     <div v-if="blockDragger.mark.y !== null" :style="`top: ${blockDragger.mark.y}px`" class="visual-editor-mark-line-y"></div>
                     <div v-if="blockDragger.mark.x !== null" :style="`left: ${blockDragger.mark.x}px`" class="visual-editor-mark-line-x"></div>
                 </div>
@@ -66,7 +67,8 @@
                 v-for="value, index in dataModel.value.blocks"
                 :key="value.componentKey"
                 :block="value"
-                :slots="slots"></VisualEditorBlock>
+                :slots="slots"
+                :customProps="props.customProps"></VisualEditorBlock>
         </div>
         <div class="vue-visual-container-edit-button" @click=openEdit>
             <i class="iconfont icon-edit"/>
@@ -89,7 +91,8 @@ import { ElMessageBox } from 'element-plus'
 const props = defineProps<{
     modelValue: VisualEditorModelValue,
     config: VisualEditorConfig,
-    formData: Record<string, any>
+    formData: Record<string, any>,
+    customProps?: Record<string, any>
 }>()
 const emit = defineEmits<{
     (e: 'update:modelValue', value: VisualEditorModelValue): Boolean
