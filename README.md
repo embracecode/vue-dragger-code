@@ -2,6 +2,7 @@
 
 低代码平台
 
+
 ### 主要文件
 
 目录结构主要文件及作用
@@ -36,6 +37,8 @@ npm install
 ```sh
 npm run dev
 ```
+注意 运行完之后打开页面时此时是预览模式 体验拖拽功能需要在头部命令点击预览 切换到编辑模式
+
 
 ### Type-Check, Compile and Minify for Production
 
