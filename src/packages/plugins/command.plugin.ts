@@ -58,15 +58,10 @@ export function useCommander() {
 
     // useCommander初始化函数，负责初始化键盘监听事件，调用命令的初始化逻辑
     const init = () => {
-        const onKeydown = (e: KeyboardEvent) => {
-            
-        }
-        window.addEventListener('keydown', onKeydown)
         state.commandArray.forEach(command => {
             !!command.init && state.destoryList.push(command.init())
         })
         state.destoryList.push(keyBoardEvent())
-        state.destoryList.push(() => window.removeEventListener('keydown', onKeydown))
     }
     const registerCommand = (command: Command) => {
         state.commandArray.push(command)

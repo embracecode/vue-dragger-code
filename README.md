@@ -2,17 +2,28 @@
 
 低代码平台
 
-## Recommended IDE Setup
+### 主要文件
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+目录结构主要文件及作用
 
-## Type Support for `.vue` Imports in TS
+```sh
+├── packages
+│   ├── component  ------------ 部分组件
+│   ├── plugins  ------------ 注册插件文件及按键映射和简单的发布订阅
+│   │   ├── command.plugin ------------  命令的注册以及undo redo （重要）
+│   ├── utils
+│   │   ├── visualEditor-operation.tsx ------------ 右侧操作栏组件 
+│   │   ├── visualEditor.props ----------- 左侧物料对用的属性
+│   │   ├── useVisualCommand ----------- 对头部命令的注册 （重要）
+│   │   ├── visualEditor.utils ----------- 物料注册的实现核心代码 （重要）
+│   │   ├── visualEditor ----------- 整个编辑器及其布局和核心代码 （重要）
+│   │   ├── visualEditorBlock ----------- 容器内的物料组件 （重要）
+├── dit-data.json   ------------- 已经设置过的数据可以直接做导入功能
+├── visualConfig.tsx   ------------ 整个物料的注册 （重要）
+```
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
 
-## Customize configuration
 
-See [Vite Configuration Reference](https://vite.dev/config/).
 
 ## Project Setup
 
@@ -30,10 +41,4 @@ npm run dev
 
 ```sh
 npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
 ```
