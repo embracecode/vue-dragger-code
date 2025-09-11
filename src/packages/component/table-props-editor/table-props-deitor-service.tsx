@@ -1,6 +1,6 @@
 import { defer } from "@/packages/utils/defer"
 import { type VisualEditorProps } from "@/packages/visualEditor.props"
-import deepcopy from "deepcopy"
+import { cloneDeep } from "lodash"
 import { ElButton, ElDialog, ElInput, ElTable, ElTableColumn } from "element-plus"
 import { createApp, defineComponent, getCurrentInstance, onMounted, reactive,  type PropType } from "vue"
 
@@ -33,7 +33,7 @@ const ServiceComponent = defineComponent({
         const methods = {
             service: (option: TablePropsEditorServiceOptions) => {
                 state.option = option
-                state.editData = deepcopy(option.data || [])
+                state.editData = cloneDeep(option.data || [])
                 methods.show()
             },
             hide: () => {
@@ -47,7 +47,7 @@ const ServiceComponent = defineComponent({
                 state.editData.push({})
             },
             reset: () => {
-                state.editData = deepcopy(state.option.data)
+                state.editData = cloneDeep(state.option.data)
             },
         }
         const handler = {

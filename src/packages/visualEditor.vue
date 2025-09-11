@@ -446,7 +446,7 @@ const buttons = [
             console.log(text)
             try {
                 const blocks = JSON.parse(text as string)
-                updateDataModel(blocks)
+                useCommander.updateModelValue(blocks)
             } catch (error) {
                 ElMessageBox.alert('JSON格式错误')
             }

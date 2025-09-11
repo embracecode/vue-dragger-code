@@ -1,8 +1,8 @@
 
-import { da } from "element-plus/es/locales.mjs";
+
 import { useCommander } from "../plugins/command.plugin";
 import type { VisualEditorBlockData, VisualEditorModelValue } from "../visualEditor.utils";
-import deepcopy from 'deepcopy'
+import { cloneDeep } from "lodash"
 export function useVisualCommand(
     { focusData, updateDataModel, dataModel, dragStart, dragEnd }: {
         focusData: { value: { focus: VisualEditorBlockData[], unFocus: VisualEditorBlockData[] } },
@@ -29,11 +29,11 @@ export function useVisualCommand(
             }
             return {
                 undo: () => {
-                    updateDataModel(deepcopy(data.before))
+                    updateDataModel(cloneDeep(data.before))
                     
                 },
                 redo: () => {
-                    updateDataModel(deepcopy(data.after))
+                    updateDataModel(cloneDeep(data.after))
                 }
             }
         }
@@ -49,10 +49,10 @@ export function useVisualCommand(
             }
             return {
                 undo: () => {
-                    updateDataModel(deepcopy(data.before))
+                    updateDataModel(cloneDeep(data.before))
                 },
                 redo: () => {
-                    updateDataModel(deepcopy(data.after))
+                    updateDataModel(cloneDeep(data.after))
                 }
             }
         }
@@ -67,7 +67,7 @@ export function useVisualCommand(
             }
             const handler = {
                 dragstart: () => {
-                    this.data.before = deepcopy(dataModel.value.blocks || [])
+                    this.data.before = cloneDeep(dataModel.value.blocks || [])
                 },
                 dragend: () => commander.state.commands.drag()
             }
@@ -80,13 +80,13 @@ export function useVisualCommand(
         },
         execute() {
             let before = this.data.before
-            let after = deepcopy(dataModel.value.blocks || [])
+            let after = cloneDeep(dataModel.value.blocks || [])
             return {
                 undo: () => {
-                    updateDataModel(deepcopy(before))
+                    updateDataModel(cloneDeep(before))
                 },
                 redo: () => {
-                    updateDataModel(deepcopy(after))
+                    updateDataModel(cloneDeep(after))
                 }
             }
         }
@@ -97,8 +97,8 @@ export function useVisualCommand(
         keyBoard: 'ctrl+up',
         execute: () => {
             let data = {
-                before: deepcopy(dataModel.value.blocks || []),
-                after: deepcopy((() => {
+                before: cloneDeep(dataModel.value.blocks || []),
+                after: cloneDeep((() => {
                     const { focus, unFocus } = focusData.value
                     const maxZIndex = Math.max(...unFocus.map(item => item.zIndex || 0), -Infinity) + 1
                     focus.forEach(item => item.zIndex = maxZIndex)
@@ -107,10 +107,10 @@ export function useVisualCommand(
             }
             return {
                 undo: () => {
-                    updateDataModel(deepcopy(data.before))
+                    updateDataModel(cloneDeep(data.before))
                 },
                 redo: () => {
-                    updateDataModel(deepcopy(data.after))
+                    updateDataModel(cloneDeep(data.after))
                 }
             }
         }
@@ -121,8 +121,8 @@ export function useVisualCommand(
         keyBoard: 'ctrl+down',
         execute: () => {
             let data = {
-                before: deepcopy(dataModel.value.blocks || []),
-                after: deepcopy((() => {
+                before: cloneDeep(dataModel.value.blocks || []),
+                after: cloneDeep((() => {
                     const { focus, unFocus } = focusData.value
                     let minZIndex = Math.min(...unFocus.map(item => item.zIndex || 0), Infinity) - 1
                     if (minZIndex < 0) {
@@ -136,10 +136,10 @@ export function useVisualCommand(
             }
             return {
                 undo: () => {
-                    updateDataModel(deepcopy(data.before))
+                    updateDataModel(cloneDeep(data.before))
                 },
                 redo: () => {
-                    updateDataModel(deepcopy(data.after))
+                    updateDataModel(cloneDeep(data.after))
                 }
             }
         }
@@ -148,7 +148,7 @@ export function useVisualCommand(
     commander.registerCommand({
         name: 'updateBlock',
         execute: (block: VisualEditorBlockData, oldBlock: VisualEditorBlockData) => {
-            let blocks = deepcopy(dataModel.value.blocks || [])
+            let blocks = cloneDeep(dataModel.value.blocks || [])
             let data = {
                 before: blocks,
                 after: (() => {
@@ -157,15 +157,15 @@ export function useVisualCommand(
                     if (index > -1) {
                         blocks.splice(index, 1, block)
                     }
-                    return deepcopy(blocks)
+                    return cloneDeep(blocks)
                 })()
             }
             return {
                 undo: () => {
-                    updateDataModel(deepcopy(data.before))
+                    updateDataModel(cloneDeep(data.before))
                 },
                 redo: () => {
-                    updateDataModel(deepcopy(data.after))
+                    updateDataModel(cloneDeep(data.after))
                 }
             }
         }
@@ -175,15 +175,15 @@ export function useVisualCommand(
         name: 'updateModelValue',
         execute: (value: VisualEditorModelValue) => {
             let data = {
-                before: deepcopy(dataModel.value),
-                after: deepcopy(value)
+                before: cloneDeep(dataModel.value),
+                after: cloneDeep(value)
             }
             return {
                 undo: () => {
-                    dataModel.value = deepcopy(data.before)
+                    dataModel.value = cloneDeep(data.before)
                 },
                 redo: () => {
-                    dataModel.value = deepcopy(data.after)
+                    dataModel.value = cloneDeep(data.after)
                 }
             }
         }

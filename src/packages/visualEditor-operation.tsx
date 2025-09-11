@@ -3,7 +3,7 @@ import type { VisualEditorBlockData, VisualEditorConfig, VisualEditorModelValue 
 import type { JSX } from "vue/jsx-runtime";
 import { ElButton, ElColorPicker, ElForm, ElFormItem, ElInput, ElInputNumber, ElOption, ElSelect } from "element-plus";
 import { VisualEditorPropsType, type VisualEditorProps } from "./visualEditor.props";
-import deepcopy from "deepcopy";
+import {cloneDeep} from "lodash";
 import { TablePropsEditor } from "./component/table-props-editor/table-props-editor";
 
 export const VisualEditorOperation = defineComponent({
@@ -23,7 +23,7 @@ export const VisualEditorOperation = defineComponent({
             apply: () => {
                 if (!props.block) {
                     // 当前编辑容器的属性
-                    props.updateModelValue({ ...props.dataModel.value, container: deepcopy(state.editData) })
+                    props.updateModelValue({ ...props.dataModel.value, container: cloneDeep(state.editData) })
                 } else {
                     // 当前编辑block组件的属性
                     const newBlock = state.editData
@@ -33,9 +33,9 @@ export const VisualEditorOperation = defineComponent({
             },
             reset: () => {
                 if (!props.block) {
-                    state.editData = deepcopy(props.dataModel.value.container)
+                    state.editData = cloneDeep(props.dataModel.value.container)
                 } else {
-                    state.editData = deepcopy(props.block)
+                    state.editData = cloneDeep(props.block)
                 }
             }
         }
