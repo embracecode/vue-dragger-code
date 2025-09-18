@@ -11,7 +11,7 @@ const buildBackground = () => {
         bundle: true,
         platform: 'node',
         outfile: 'dist/background.js', // 输出文件
-        target: 'esnext',
+        target: 'node12',
         format: 'esm',
         external: ['electron']
     })

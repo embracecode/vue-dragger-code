@@ -1,6 +1,5 @@
 // electron 主进程文件
 import { app, BrowserWindow } from 'electron'
-
 app.whenReady().then(() => {
     const win = new BrowserWindow({
         width: 800,

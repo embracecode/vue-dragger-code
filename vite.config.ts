@@ -4,15 +4,15 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import vueDevTools from 'vite-plugin-vue-devtools'
-// import { ElectronDevPlugin } from './electronplugin/vite.electron.dev'
-// import { ElectronBuilderPlugin } from './electronplugin/vite.eletron.builder'
+import { ElectronDevPlugin } from './electronplugin/vite.electron.dev'
+import { ElectronBuilderPlugin } from './electronplugin/vite.eletron.builder'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
-    vueDevTools()
+    vueDevTools(),
     // ElectronDevPlugin(),
     // ElectronBuilderPlugin()
   ],
