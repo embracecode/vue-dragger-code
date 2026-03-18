@@ -21,6 +21,7 @@ import JsonDataZindex from './edit-data.json'
 import { Children } from './packages/children'
 import { NumberRangeComponent } from './packages/component/number-range/number-range'
 import { ElNotification } from 'element-plus'
+// @ts-ignore
 import { fpsMonitor } from './utils/fpsMonitor.js'
 const configOptions = [
     {
