@@ -13,8 +13,8 @@ export default defineConfig({
     vue(),
     vueJsx(),
     vueDevTools(),
-    // ElectronDevPlugin(),
-    // ElectronBuilderPlugin()
+    ElectronDevPlugin(),
+    ElectronBuilderPlugin()
   ],
   base: './', // 默认是绝对路径 / 这里改成相对路径 ./ 不然会白屏
   resolve: {

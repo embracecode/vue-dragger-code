@@ -14,13 +14,14 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref, computed, onMounted } from 'vue'
 import VisualEditor from './packages/visualEditor.vue'
 import { visualConfig } from './visualConfig'
 import JsonDataZindex from './edit-data.json'
 import { Children } from './packages/children'
 import { NumberRangeComponent } from './packages/component/number-range/number-range'
 import { ElNotification } from 'element-plus'
+import { fpsMonitor } from './utils/fpsMonitor.js'
 const configOptions = [
     {
         key: 'abc',
@@ -90,6 +91,9 @@ const customProps = reactive({
     }
 })
 const visualConfigData = reactive(visualConfig)
+onMounted(() => {
+    console.log(fpsMonitor.getReport())
+})
 </script>
 
 <style scoped>
