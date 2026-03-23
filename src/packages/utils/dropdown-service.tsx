@@ -20,7 +20,7 @@ const dropdownServiceProvider = (() => {
         }
     }
 })()
-
+//  在编辑模式下的右键菜单  目前提供的功能有  置顶 置底 删除 查看数据 导入数据
 const ServiceComponent = defineComponent({
     props: {
         options: { type: Object as PropType<DropdownServiceOptions>, required: true }

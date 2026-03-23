@@ -14,6 +14,7 @@ export function createEvent() {
             }
         },
         emit: () => {
+            console.log('emit------------', listeners)
             listeners.forEach(item => item())
         },
         once(cb: SimplyListener) {
